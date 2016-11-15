@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<style>
+		* { 
+			font-family: arial, sans-serif; 
+		}
+		.error{
+			padding: 5px;
+			text-align: center;
+			width: 35%;
+			color: white;
+			background-color: red;
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<h2>Login!</h2>
+
+	<% if flash[:errors] %>
+		<div class="error">
+			<% flash[:errors].each do |error| %>
+				<h3><%= error %></h3>
+			<% end %>
+		</div>
+	<% end %>
+
+	<%= form_for :user, url: '/checklogin' do |f| %>
+  		Email: <%= f.text_field :email %><br>
+  		Password: <%= f.text_field :password %><br>
+  		<br>
+  	<%= f.submit "Submit" %>
+
+<% end %>
+
+</body>
+</html>

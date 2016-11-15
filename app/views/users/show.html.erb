@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Login</title>
+	<style>
+		* { 
+			font-family: arial, sans-serif; 
+		}
+		table {	
+			border-collapse: collapse;
+		}
+		td, th {
+			border: 1px solid #aaa;
+			text-align: left;
+			padding: 8px;
+		}
+		tr:nth-child(even) {
+			background-color: #ddd;
+		}
+		.button{
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+	<% if current_user %>
+		<%= form_tag("/logout", method: "get") do %>
+			<%= submit_tag("Log Out") %>
+		<% end %>
+	<% end %>
+	<h2>Showing user: <%=@user.name%> </h2>
+	
+	<table>
+	<tr>
+		<th>Secret</th>
+		<th>Like?</th>
+		<th>Number of Likes</th>
+		<th>Delete?</th>
+	</tr>
+	<% @secrets.each do |secret| %>
+		<tr>
+			<td><%= secret.content %></td>
+			<td>
+				<% if @likes.where(secret_id: secret.id).where(user_id: session[:user_id]).exists? %>
+					<%= form_tag("/unlike/#{secret.id}", method: "post", class: "button") do %>
+					<%= submit_tag("Unlike?") %>
+					<% end %>
+				<% else %>
+					<%= form_tag("/like/#{secret.id}", method: "get", class: "button") do %>
+					<%= submit_tag("Like?") %>
+					<% end %>
+				<% end %>
+			</td>
+			<td><%= @likes.where(secret_id: secret.id).length %></td>
+			<td>
+			<% if session[:user_id] == secret.user.id %>
+				<%= form_tag("/secret/#{secret.id}", method: "delete", class: "button") do %>
+				<%= submit_tag("Delete") %>
+				<% end %>
+			<% end %>
+			</td>
+		</tr>
+	<% end %>
+	</table>
+
+	<% if session[:user_id] == @user.id %>
+		<h2>Create new secret:</h2>	
+		<%= form_tag("/users/#{@user.id}/secret", method: "post") do %>
+	 	<%= label_tag(:content, "Secret:") %><br>
+	  	<%= text_area_tag(:content, "", size: "50x10") %><br>
+	  	<%= submit_tag("New Secret") %>
+		<% end %>
+	<% end %>
+
+	<br><a href="/users/<%=@user.id%>/edit">Edit Profile</a>
+
+</body>
+</html>

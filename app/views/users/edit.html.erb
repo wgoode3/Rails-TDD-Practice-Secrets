@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Edit User</title>
+	<style>
+		* { 
+			font-family: arial, sans-serif; 
+		}
+	</style>
+</head>
+<body>
+	<% if current_user %>
+		<%= form_tag("/logout", method: "get") do %>
+			<%= submit_tag("Log Out") %>
+		<% end %>
+	<% end %>
+	
+	<h2>Editing user: <%=@user.name%> </h2>
+
+	<% if session[:user_id] == @user.id %>
+		<%= form_tag("/update/#{@user.id}", method: "patch") do %>
+			<%= label_tag(:name, "Name:") %>
+			<%= text_field_tag(:name, "#{@user.name}") %><br>
+			<%= label_tag(:email, "Email:") %>
+			<%= text_field_tag(:email, "#{@user.email}") %><br>
+			<%= submit_tag("Update") %><br>
+		<% end %>
+
+		<%= form_tag("/delete/#{@user.id}", method: "delete") do %>
+			<%= submit_tag("Delete Account") %>
+		<% end %>
+	<% end %>
+
+	<br><a href="/users/<%=@user.id%>">Back</a>
+</body>
+</html>
