@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get 'users/new' => 'users#register'
 
+  root 'users#secrets'
+
   get '/sessions/new' => 'users#login'
 
   post '/checklogin' => 'users#checklogin'

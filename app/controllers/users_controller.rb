@@ -81,13 +81,13 @@ class UsersController < ApplicationController
   	  if not check.exists?
   		  Like.create(user_id: session[:user_id], secret_id: params[:id])
   	  end
-      redirect_to "/secrets"
+      redirect_to :back
   	end
   end
 
   def unlikes
   	Like.where(user_id: session[:user_id]).where(secret_id: params[:id])[0].destroy
-  	redirect_to "/secrets"
+  	redirect_to :back
   end
 
   private
